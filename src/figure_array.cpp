@@ -1,32 +1,30 @@
 #include "../include/figure_array.h"
 #include <stdexcept>
 
-FigureArray* create_array(int capacity) {
+FigureArray* create_array(int cap) {
     FigureArray* fa = new FigureArray;
-    fa->capacity = capacity;
+    fa->cap = cap;
     fa->size = 0;
-    fa->figures = new Figure*[capacity];
+    fa->figures = new Figure*[cap];
     return fa;
 }
 
+// удаляем массив, а фигуры остаются 
 void destroy_array(FigureArray* arr) {
-    // Важно: эта функция не удаляет сами фигуры, только массив указателей
-    // и саму структуру. Фигуры нужно удалять отдельно.
     delete[] arr->figures;
     delete arr;
 }
 
 void add_figure(FigureArray* arr, Figure* fig) {
-    if (arr->size == arr->capacity) {
-        // Простое расширение массива (можно сделать сложнее)
-        int new_capacity = arr->capacity * 2;
-        Figure** new_figures = new Figure*[new_capacity];
+    if (arr->size == arr->cap) {
+        int new_cap = arr->cap * 2;
+        Figure** new_figures = new Figure*[new_cap];
         for (int i = 0; i < arr->size; ++i) {
             new_figures[i] = arr->figures[i];
         }
         delete[] arr->figures;
         arr->figures = new_figures;
-        arr->capacity = new_capacity;
+        arr->cap = new_cap;
     }
     arr->figures[arr->size++] = fig;
 }
@@ -35,9 +33,8 @@ void remove_figure(FigureArray* arr, int index) {
     if (index < 0 || index >= arr->size) {
         throw std::out_of_range("Index out of range.");
     }
-    // Удаляем саму фигуру
     delete arr->figures[index];
-    // Сдвигаем оставшиеся элементы
+    // сдвигаем
     for (int i = index; i < arr->size - 1; ++i) {
         arr->figures[i] = arr->figures[i + 1];
     }

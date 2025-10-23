@@ -1,15 +1,15 @@
 #pragma once
 #include "figure.h"
 
-// Структура для хранения массива указателей на фигуры
+// массив указателй
 struct FigureArray {
     Figure **figures;
     int size;
-    int capacity;
+    int cap;
 };
 
-// Функции для работы с массивом
-FigureArray* create_array(int capacity = 10);
+
+FigureArray* create_array(int cap = 10);
 void destroy_array(FigureArray* arr);
 void add_figure(FigureArray* arr, Figure* fig);
 void remove_figure(FigureArray* arr, int index);

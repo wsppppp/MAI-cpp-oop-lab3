@@ -6,15 +6,15 @@ Trapezoid::Trapezoid() {
     n = 4;
     p = new Point[n];
 }
+    const double EPS = 1e-6;
 
-// Проверка для трапеции: две стороны должны быть параллельны (иметь одинаковый наклон)
-// Для простоты будем считать, что параллельные стороны горизонтальны (одинаковый y)
+// будем считать, что одинаковый y для ||
 Trapezoid::Trapezoid(const Point& p1, const Point& p2, const Point& p3, const Point& p4) {
-    bool p1p2_parallel = std::abs(p1.y - p2.y) < 1e-6;
-    bool p3p4_parallel = std::abs(p3.y - p4.y) < 1e-6;
+    bool p1p2_parallel = std::abs(p1.y - p2.y) < EPS;
+    bool p3p4_parallel = std::abs(p3.y - p4.y) < EPS;
 
     if (!p1p2_parallel || !p3p4_parallel) {
-        throw std::logic_error("This is not a trapezoid (or not aligned horizontally). For simplicity, bases must be horizontal.");
+        throw std::logic_error("This is not a trapezoid.");
     }
     
     n = 4;

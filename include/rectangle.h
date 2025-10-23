@@ -8,5 +8,5 @@ public:
     ~Rectangle();
 
     double getArea() const override;
-    operator double() const override;
+    operator double() const override; // будет вызывать метод getArea
 };

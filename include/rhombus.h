@@ -7,11 +7,9 @@ public:
     Rhombus(const Point& p1, const Point& p2, const Point& p3, const Point& p4);
     ~Rhombus();
 
-    // Реализация виртуальных методов
     double getArea() const override;
     operator double() const override;
 
-    // Специфичные для класса операторы
     Rhombus& operator=(const Rhombus& other);
     bool operator==(const Rhombus& other) const;
 };
