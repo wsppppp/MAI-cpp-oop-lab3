@@ -4,15 +4,21 @@
 
 class Figure {
 public:
-    virtual Point get_center() const = 0;
-    virtual operator double() const = 0; 
-
     virtual ~Figure() = default;
 
-    // реализация через сравнение площадей и центров
-    bool operator==(const Figure& other) const;
-};
+    // Чисто виртуальные методы, которые должны реализовать наследники
+    virtual double getArea() const = 0;
+    virtual operator double() const = 0;
 
-// перегузка для ввода и вывода
-std::istream& operator>>(std::istream& is, Figure& f);
-std::ostream& operator<<(std::ostream& os, const Figure& f);
+    // Общие методы
+    Point getCenter() const;
+
+protected:
+    // Данные, доступные наследникам
+    int n;       // Количество вершин
+    Point *p;    // Указатель на массив вершин
+
+    // Дружественные операторы для доступа к protected-данным
+    friend std::istream& operator>>(std::istream& is, Figure& figure);
+    friend std::ostream& operator<<(std::ostream& os, const Figure& figure);
+};

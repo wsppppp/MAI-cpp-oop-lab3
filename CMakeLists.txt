@@ -11,6 +11,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # ==== Библиотека с фигурами ====
 # Собираем всю логику фигур в одну статическую библиотеку 'figures'
 add_library(figures
+    src/point.cpp 
+    src/figure.cpp
+    src/figure_array.cpp
     src/rectangle.cpp
     src/trapezoid.cpp
     src/rhombus.cpp

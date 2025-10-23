@@ -1,42 +1,45 @@
 #include "../include/rectangle.h"
+#include <stdexcept>
 #include <cmath>
 
-Rectangle::Rectangle(Point a, Point c) : p1(a), p3(c) {}
-
-Point Rectangle::get_center() const {
-    return {(p1.x + p3.x) / 2.0, (p1.y + p3.y) / 2.0};
+Rectangle::Rectangle() {
+    n = 4;
+    p = new Point[n];
 }
 
-Rectangle::operator double() const {
-    // Находим две другие вершины, чтобы вычислить стороны
-    Point p2 = {p1.x, p3.y};
-    Point p4 = {p3.x, p1.y};
-    double side1 = std::sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2));
-    double side2 = std::sqrt(pow(p2.x - p3.x, 2) + pow(p2.y - p3.y, 2));
+Rectangle::Rectangle(const Point& p1, const Point& p2, const Point& p3, const Point& p4) {
+    // Простая проверка для прямоугольника (через скалярное произведение векторов)
+    Point v1 = {p2.x - p1.x, p2.y - p1.y};
+    Point v2 = {p4.x - p1.x, p4.y - p1.y};
+    Point v3 = {p3.x - p2.x, p3.y - p2.y};
+    Point v4 = {p3.x - p4.x, p3.y - p4.y};
+
+    const double EPS = 1e-6;
+    // Скалярное произведение v1 и v2 должно быть 0 (угол 90 градусов)
+    if (std::abs(v1.x * v2.x + v1.y * v2.y) > EPS) {
+        throw std::logic_error("This is not a rectangle: angle is not 90 degrees.");
+    }
+    // Противоположные стороны должны быть равны (v1 == v4, v2 == v3)
+    if (!v1.is_equal(v4) || !v2.is_equal(v3)) {
+         throw std::logic_error("This is not a rectangle: opposite sides are not equal.");
+    }
+
+    n = 4;
+    p = new Point[n];
+    p[0] = p1; p[1] = p2; p[2] = p3; p[3] = p4;
+}
+
+Rectangle::~Rectangle() {
+    delete[] p;
+    p = nullptr;
+}
+
+double Rectangle::getArea() const {
+    double side1 = p[0].length(p[1]);
+    double side2 = p[0].length(p[3]);
     return side1 * side2;
 }
 
-// Реализация конструкторов и операторов
-Rectangle::Rectangle(const Rectangle& other) : p1(other.p1), p3(other.p3) {}
-Rectangle::Rectangle(Rectangle&& other) noexcept : p1(other.p1), p3(other.p3) {}
-Rectangle& Rectangle::operator=(const Rectangle& other) {
-    if (this != &other) { p1 = other.p1; p3 = other.p3; }
-    return *this;
-}
-Rectangle& Rectangle::operator=(Rectangle&& other) noexcept {
-    if (this != &other) { p1 = other.p1; p3 = other.p3; }
-    return *this;
-}
-
-// Реализация операторов ввода/вывода
-std::istream& operator>>(std::istream& is, Rectangle& r) {
-    std::cout << "Enter 2 opposite vertices of a rectangle (x1 y1 x2 y2): ";
-    is >> r.p1.x >> r.p1.y >> r.p3.x >> r.p3.y;
-    return is;
-}
-std::ostream& operator<<(std::ostream& os, const Rectangle& r) {
-    Point p2 = {r.p1.x, r.p3.y};
-    Point p4 = {r.p3.x, r.p1.y};
-    os << "Rectangle vertices: " << r.p1 << ", " << p2 << ", " << r.p3 << ", " << p4;
-    return os;
+Rectangle::operator double() const {
+    return getArea();
 }
